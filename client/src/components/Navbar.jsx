@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -11,11 +12,11 @@ const Navbar = () => {
           </select>
           <input className='border ps-3' type="text" placeholder='Search' />
         </div>
-        <p className='text-2xl font-semibold'>SneakStore</p>
+        <Link to={"/"} ><p className='text-2xl font-semibold'>SneakStore</p></Link>
         <div className='flex gap-5 self-center'>
           <p>Register</p>
           <p>Login</p>
-          <p>C</p>
+          <Link to="/cart">C</Link>
         </div>
       </div>
   )

@@ -7,12 +7,16 @@ import productRoute from './routes/product.js';
 import cartRoute from './routes/cart.js';
 import orderRoute from './routes/order.js';
 import stripeRoute from './routes/stripe.js';
+import cors from "cors"
+import cookieParser from 'cookie-parser';
 
 const app = express();
 dotenv.config();
 
 // Middlewares 
+app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // Api Routes
 app.use("/api/auth", authRoute)

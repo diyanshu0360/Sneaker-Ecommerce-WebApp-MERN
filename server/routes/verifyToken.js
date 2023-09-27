@@ -1,40 +1,45 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
 const verifyToken = (req, res, next) => {
-    const authHeader = req.headers.token;
-
-    if(authHeader){
-        const token = authHeader.split(" ")[1];
-        jwt.verify(token, process.env.JWT, (err, user) => {
-            if(err) res.status(403).json("Token is invalid");
-            req.user = user;
-            next();
-        });
-    } else {
-        return res.status(401).json("You are not authenticated");
-    }
-}
-
-const verifyTokenAndAuthorization = (req, res, next) => {
-    verifyToken(req, res, () => {
-        if(req.user.id === req.params.id || req.user.isAdmin){
-            next();
-        } else {
-            res.status(403).json("You are not allowed!")
+  const authHeader = req.headers.token;
+  if (authHeader) {
+    const tokenParts = authHeader.split(" ");
+    if (tokenParts.length === 2 && tokenParts[0] === "Bearer") {
+      const token = tokenParts[1];
+      jwt.verify(token, process.env.JWT, (err, user) => {
+        if (err) {
+          return res.status(403).json({ error: "Token is not valid" });
         }
-    })
-}
-
-const verifyTokenAndAdmin = (req, res, next) => {
-    verifyToken(req, res, () => {
-      if (req.user.isAdmin) {
+        req.user = user;
         next();
-      } else {
-        res.status(403).json("You are not alowed to do that!");
-      }
-    });
+      });
+    } else {
+      return res.status(403).json({ error: "Invalid token format" });
+    }
+  } else {
+    return res.status(401).json({ error: "You are not authenticated" });
+  }
 };
 
-export default verifyToken;
-export { verifyTokenAndAuthorization };
-export { verifyTokenAndAdmin };
+
+const verifyTokenAndAuthorization = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (req.user.id === req.params.id || req.user.isAdmin) {
+      next();
+    } else {
+      res.status(403).json({ error: "You are not allowed to do that" });
+    }
+  });
+};
+
+const verifyTokenAndAdmin = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (req.user.isAdmin) {
+      next();
+    } else {
+      res.status(403).json({ error: "You are not allowed to do that" });
+    }
+  });
+};
+
+export { verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin };

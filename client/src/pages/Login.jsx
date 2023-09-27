@@ -1,5 +1,4 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
 import shoeImg from '../images/shoes_login_register.jpg';
 
 const Login = () => {

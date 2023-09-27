@@ -1,5 +1,6 @@
 import React from 'react'
 import CategoryItem from './CategoryItem'
+import { categories } from "../data"; 
 
 const Categories = () => {
   return (
@@ -8,9 +9,9 @@ const Categories = () => {
         <p className='text-2xl font-semibold'>CHOOSE YOUR CATEGORY</p>
       </div>
       <div className='bg-slate-100 p-10'>
-        <CategoryItem />
-        <CategoryItem />
-        <CategoryItem />
+        {categories.map((item) => (
+        <CategoryItem item={item} key={item.id} />
+      ))}
       </div>
     </div>
   )
