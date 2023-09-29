@@ -11,9 +11,10 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const { isFetching, error } = useSelector((state) => state.user);
+  // const { isFetching, error } = useSelector((state) => state.user);
 
   const handleClick = (e) => {
+    console.log("Login Start");
     e.preventDefault();
     login(dispatch, { username, password });
   };
@@ -27,7 +28,7 @@ const Login = () => {
         <div className='flex flex-col'>
           <input className='border border-black p-1 m-3 w-60 ps-3' type="email" onChange={(e) => setUsername(e.target.value)} placeholder='Enter Email : ' />
           <input className='border border-black p-1 m-3 w-60 ps-3' type="password" onChange={(e) => setPassword(e.target.value)} placeholder='Enter Password : ' />
-          <button className='bg-black text-white p-1 m-3 mb-2' onClick={handleClick} disabled={isFetching}>Log In</button>
+          <button className='bg-black text-white p-1 m-3 mb-2' onClick={handleClick}>Log In</button>
           <button className='bg-slate-100 p-1 m-3 mt-2'>Log In with Google</button>
         </div>
         <p className='text-sm text-center m-3'>Don't have an account? <span  onClick={() => navigate('/register')} className='font-semibold text-blue-500 underline cursor-pointer	'>Sign Up</span></p>

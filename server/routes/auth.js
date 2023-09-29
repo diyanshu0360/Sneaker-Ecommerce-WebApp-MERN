@@ -22,6 +22,7 @@ router.post("/register", async (req, res) => {
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -33,7 +34,7 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res.status(401).json({ error: "Wrong credentials!" });
     }
-
+    
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) {
       return res.status(401).json({ error: "Wrong credentials!" });
@@ -51,6 +52,7 @@ router.post("/login", async (req, res) => {
     const { password, ...others } = user._doc;
     res.status(200).json({ ...others, accessToken });
   } catch (err) {
+    console.log(error);
     res.status(500).json({ error: err.message });
   }
 });
