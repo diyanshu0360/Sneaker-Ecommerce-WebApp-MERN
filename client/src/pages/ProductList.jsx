@@ -4,18 +4,15 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import ProductItem from '../components/ProductItem'
 import { useLocation } from "react-router";
-import axios from "axios"
 import { Link } from "react-router-dom";
+import axios from "axios"
 
 const ProductList = () => {
 
   const location = useLocation();
   const cat = location.pathname.split("/")[2];
-
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState("newest");
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
 
   const handleFilters = (e) => {
     const value = e.target.value;
@@ -25,6 +22,9 @@ const ProductList = () => {
     });
   };
 
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+
   useEffect(() => {
     const getProducts = async () => {
       try {
@@ -33,36 +33,12 @@ const ProductList = () => {
             ? `http://localhost:5002/api/products?category=${cat}`
             : "http://localhost:5002/api/products"
         );
+        console.log(res.data)
         setProducts(res.data);
-      } catch (err) { }
+      } catch (err) {}
     };
     getProducts();
   }, [cat]);
-
-  useEffect(() => {
-    const filtered = products.filter((item) => {
-      if (cat && item.categories.indexOf(cat) === -1) {
-        return false;
-      }
-      if (filters.color && item.color.indexOf(filters.color) === -1) {
-        return false;
-      }
-      if (filters.size && item.size.indexOf(filters.size) === -1) {
-        return false;
-      }
-      return true;
-    });
-
-    let sortedProducts = [...filtered];
-    if (sort === "newest") {
-      sortedProducts.sort((a, b) => a.createdAt - b.createdAt);
-    } else if (sort === "asc") {
-      sortedProducts.sort((a, b) => a.price - b.price);
-    } else {
-      sortedProducts.sort((a, b) => b.price - a.price);
-    }
-    setFilteredProducts(sortedProducts);
-  }, [products, cat, filters, sort]);
 
   return (
     <div>
@@ -100,15 +76,13 @@ const ProductList = () => {
             </div>
           </div>
           <div className='flex flex-wrap justify-evenly gap-[45px]'>
-            {filteredProducts
+            {filteredProducts.length > 1
               ? filteredProducts.map((item, index) =>
                 <Link to={`/product/${item._id}`} key={index}>
                   <ProductItem item={item} />
                 </Link>
               )
-              : products
-                .slice(0, 8)
-                .map((item, index) =>
+              : products.map((item, index) =>
                   <Link to={`/product/${item._id}`} key={index}>
                     <ProductItem item={item} />
                   </Link>

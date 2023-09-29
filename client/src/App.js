@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Home from "./pages/Home";
 import ProductList from "./pages/ProductList";
 import Login from "./pages/Login";
@@ -7,14 +7,14 @@ import Register from "./pages/Register";
 import ProductInfo from "./pages/ProductInfo";
 import Cart from "./pages/Cart";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { CartProvider } from './apirequests/CartContext.js';
+import { useSelector } from "react-redux";
 
 function App() {
-  const user = true;
+
+  const user = useSelector((state) => state.user.currentUser);
 
   return (
     <div className="App">
-      <CartProvider>
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route
@@ -30,7 +30,6 @@ function App() {
           <Route path="/product/:id" element={<ProductInfo />} />
           <Route path="/cart" element={<Cart />} />
         </Routes>
-      </CartProvider>
     </div>
   );
 }

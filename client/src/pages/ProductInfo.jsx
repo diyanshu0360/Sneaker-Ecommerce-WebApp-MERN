@@ -3,32 +3,27 @@ import Announcement from '../components/Announcement';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useLocation } from "react-router";
-import { publicRequest } from "../apirequests/requestMethod.js";
-import { useNavigate } from 'react-router-dom';
-import { useCart } from '../apirequests/CartContext.js';
-// import { addProduct } from "../redux/cartRedux";
-// import { useDispatch } from "react-redux";
+import { publicRequest } from "../requestMethods.js";
+import { addProduct } from "../apirequests/cartRedux";
+import { useDispatch } from "react-redux";
 
 
 const ProductInfo = () => {
 
   const location = useLocation();
   const id = location.pathname.split("/")[2];
-
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const res = await publicRequest.get(`http://localhost:5002/api/products/find/${id}`);
+        const res = await publicRequest.get("http://localhost:5002/api/products/find/" + id);
         setProduct(res.data);
-      } catch(err) {
-        console.log(err)
-      }
+      } catch {}
     };
     getProduct();
   }, [id]);
@@ -41,12 +36,10 @@ const ProductInfo = () => {
     }
   };
 
-  const { addToCart } = useCart();
-  const navigate = useNavigate();
-
   const handleClick = () => {
-    addToCart({ ...product, quantity, color, size });
-    navigate('/cart');
+    dispatch(
+      addProduct({ ...product, quantity, color, size })
+    );
   };
 
   return (
