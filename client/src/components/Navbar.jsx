@@ -5,9 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const persistRoot = JSON.parse(localStorage.getItem('persist:root'));
-  console.log(persistRoot);
-  const [user, setUser] = useState(persistRoot.user);
-  console.log(user);
+  const userJSON = JSON.parse(persistRoot.user)
+  const [user, setUser] = useState(userJSON.currentUser == null ? false : true);
   const navigate = useNavigate();
 
   const handleLogout = () => {
