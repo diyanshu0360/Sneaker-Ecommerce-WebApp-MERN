@@ -10,7 +10,6 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-
     const persistRoot = JSON.parse(localStorage.getItem('persist:root'));
 
     if (persistRoot && persistRoot.user) {
